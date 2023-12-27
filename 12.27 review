@@ -1,0 +1,55 @@
+#include <Bounce2.h>
+
+int button_L = 3;
+int button_R = 9;
+Bounce debouncer_L = Bounce();
+Bounce debouncer_R = Bounce();
+
+int LED_L=4;
+int LED_R=10;
+
+void setup() {
+  pinMode(button_L, INPUT_PULLUP); //기본이 high
+  pinMode(button_R, INPUT_PULLUP); //기본이 high
+  
+  debouncer_L.attach(button_L);
+  debouncer_L.interval(50);
+  debouncer_R.attach(button_R);
+  debouncer_R.interval(50);
+  
+  Serial.begin(115200);
+}
+
+void loop() 
+{
+  debouncer_L.update();
+  debouncer_R.update();
+  
+//버튼 누름
+  if(debouncer_L.fell())
+  {
+    Serial.println("LEFT");
+    digitalWrite(LED_L, HIGH);    //LED HIGH : 켜짐
+    delay(100);
+  }
+  if(debouncer_R.fell())
+  {
+    Serial.println("RIGHT");
+    digitalWrite(LED_R, HIGH);
+    delay(100);
+  }
+
+  
+  if(debouncer_L.rose())
+  {
+    Serial.println("LEFT off");
+    digitalWrite(LED_L, LOW);
+    delay(100);
+  }
+  if(debouncer_R.rose())
+  {
+    Serial.println("RIGHT off");
+    digitalWrite(LED_R, LOW);
+    delay(100);
+  }
+}
